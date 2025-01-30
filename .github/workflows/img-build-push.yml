@@ -16,8 +16,12 @@ on:
       port:
         type: string
         required: true
-        
-
+    secrets:
+      docker-uname:
+        required: true
+      docker-token:
+        required: true
+    
 jobs:
   Image_build-push:
     runs-on: ubuntu-latest
@@ -30,7 +34,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Debug Docker Username.
-        run: echo "Docker username is '${{ secrets.DOCKER_UNAME }}'"
+        run: echo "Docker username is '${{ secrets.docker-uname }}'"
 
         
       - name: Build and tag of docker image
@@ -43,13 +47,13 @@ jobs:
           fi
           echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_OUTPUT
           echo "Image Tag: $IMAGE_TAG"  # Debugging output
-          docker build -t ${{ secrets.DOCKER_UNAME }}/${{ inputs.app-component }}:$IMAGE_TAG .
+          docker build -t ${{ secrets.docker-uname }}/${{ inputs.app-component }}:$IMAGE_TAG .
 
           
       - name: Test newly created build image
-        run: docker run --rm -d --name ${{inputs.container}} -p ${{inputs.port}}:${{inputs.port}} ${{secrets.DOCKER_UNAME}}/${{inputs.app-component}}:${{env.IMAGE_TAG}}
+        run: docker run --rm -d --name ${{inputs.container}} -p ${{inputs.port}}:${{inputs.port}} ${{secrets.docker-uname}}/${{inputs.app-component}}:${{env.IMAGE_TAG}}
       - name: Push image to DockerHub
         if  : success()
         run : |
-          docker login -u ${{ secrets.DOCKER_UNAME }} -p ${{ secrets.DOCKER_TOKEN }}
-          docker push ${{ secrets.DOCKER_UNAME }}/${{inputs.app-component}}:${{env.IMAGE_TAG}}
+          docker login -u ${{ secrets.docker-uname }} -p ${{ secrets.docker-token }}
+          docker push ${{ secrets.docker-uname }}/${{inputs.app-component}}:${{env.IMAGE_TAG}}
