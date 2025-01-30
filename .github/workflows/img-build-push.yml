@@ -47,4 +47,4 @@ jobs:
         if  : success()
         run : |
           docker login -u ${{ secrets.DOCKER_UNAME }} -p ${{ secrets.DOCKER_TOKEN }}
-          docker push ${{ secrets.DOCKER_UNAME }}/${{inputs.app-component}}:${{ outputs.image-tag }}
+          docker push ${{ secrets.DOCKER_UNAME }}/${{inputs.app-component}}:${{steps.tagging.outputs.IMAGE_TAG}}
