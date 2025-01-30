@@ -33,7 +33,7 @@ jobs:
         id: tagging
         run: |
           if [[ "${{ inputs.initial }}" == "yes" ]]; then
-            IMAGE_TAG="latest"
+            IMAGE_TAG="first"
           else  
             IMAGE_TAG="${GITHUB_SHA::7}"
           fi
