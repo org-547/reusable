@@ -51,9 +51,9 @@ jobs:
 
           
       - name: Test newly created build image
-        run: docker run --rm -d --name ${{inputs.container}} -p ${{inputs.port}}:${{inputs.port}} ${{secrets.docker-uname}}/${{inputs.app-component}}:${{env.IMAGE_TAG}}
+        run: docker run --rm -d --name ${{inputs.container}} -p ${{inputs.port}}:${{inputs.port}} ${{secrets.docker-uname}}/${{inputs.app-component}}:$IMAGE_TAG
       - name: Push image to DockerHub
         if  : success()
         run : |
           docker login -u ${{ secrets.docker-uname }} -p ${{ secrets.docker-token }}
-          docker push ${{ secrets.docker-uname }}/${{inputs.app-component}}:${{env.IMAGE_TAG}}
+          docker push ${{ secrets.docker-uname }}/${{inputs.app-component}}:$IMAGE_TAG
