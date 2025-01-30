@@ -29,7 +29,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Debug Docker Username
+      - name: Debug Docker Username.
         run: echo "Docker username is '${{ secrets.DOCKER_UNAME }}'"
 
         
