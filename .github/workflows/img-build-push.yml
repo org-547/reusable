@@ -42,7 +42,7 @@ jobs:
 
           
       - name: Test newly created build image
-        run: docker run --rm -d --name ${{container}} -p ${{inputs.port}}:${{inputs.port}} ${{secrets.DOCKER_UNAME}}/${{inputs.app-component}}:${{outputs.image-tag}}
+        run: docker run --rm -d --name ${{container}} -p ${{inputs.port}}:${{inputs.port}} ${{secrets.DOCKER_UNAME}}/${{inputs.app-component}}:${{steps.tagging.outputs.image-tag}}
       - name: Push image to DockerHub
         if  : success()
         run : |
