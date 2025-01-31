@@ -45,7 +45,7 @@ jobs:
             tag="${GITHUB_SHA::7}"
           fi
           echo "image-tag value from variable is: $tag"
-          echo "image-tag=$tag" >> "$GITHUB_OUTPUT"
+          echo image-tag=$tag >> $GITHUB_OUTPUT
           echo "Image Tag: ${{ steps.tagging.outputs.image-tag }}"  # Debugging output
           docker build -t ${{ secrets.docker-uname }}/${{ inputs.app-component }}:${{ steps.tagging.outputs.image-tag }} .
 
