@@ -39,13 +39,14 @@ jobs:
       - name: Set tag for docker image
         id: tagging
         run: |
-          if [[ "${{ inputs.initial }}" == "yes" ]]; then
+          if [ "${{ inputs.initial }}" == "yes" ]; then
             tag="first"
             echo "image-tag=first" >> $GITHUB_OUTPUT
           else  
             tag="${GITHUB_SHA::7}"
             echo "image-tag=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
           fi
+          echo ${{ needs.Image-build-push.outputs.image-tag }}
 
       - name: Tagging and build of docker image    
         run: docker build -t ${{ secrets.docker-uname }}/${{ inputs.app-component }}:${{ steps.tagging.outputs.image-tag }} .
