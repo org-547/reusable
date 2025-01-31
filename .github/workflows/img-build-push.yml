@@ -26,8 +26,8 @@ jobs:
   Image_build-push:
     runs-on: ubuntu-latest
 
-    #outputs:
-      #image-tag: ${{ steps.tagging.outputs.IMAGE_TAG }}
+    outputs:
+      image-tag: ${{ steps.tagging.outputs.IMAGE_TAG }}
 
     steps:
       - name: Checkout repository
