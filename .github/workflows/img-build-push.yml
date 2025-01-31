@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      image-tag: ${{ steps.tagging.outputs.IMAGE_TAG }}
+      image-tag: ${{ steps.tagging.outputs.image-tag }}
 
     steps:
       - name: Checkout repository
@@ -35,26 +35,23 @@ jobs:
 
       - name: Debug Docker Username.
         run: echo "Docker username is '${{ secrets.docker-uname }}'"
-
         
       - name: Build and tag of docker image
         id: tagging
         run: |
           if [[ "${{ inputs.initial }}" == "yes" ]]; then
-            IMAGE_TAG="first"
+            tag="first"
           else  
-            IMAGE_TAG="${GITHUB_SHA::7}"
+            tag="${GITHUB_SHA::7}"
           fi
-          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_OUTPUT
-          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
-          echo "Image Tag: $IMAGE_TAG"  # Debugging output
-          docker build -t ${{ secrets.docker-uname }}/${{ inputs.app-component }}:$IMAGE_TAG .
+          echo "image-tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "Image Tag: ${{ steps.tagging.outputs.image-tag }}"  # Debugging output
+          docker build -t ${{ secrets.docker-uname }}/${{ inputs.app-component }}:${{ steps.tagging.outputs.image-tag }} .
 
-          
       - name: Test newly created build image
-        run: docker run --rm -d --name ${{inputs.container}} -p ${{inputs.port}}:${{inputs.port}} ${{secrets.docker-uname}}/${{inputs.app-component}}:${{env.IMAGE_TAG}}
+        run: docker run --rm -d --name ${{inputs.container}} -p ${{inputs.port}}:${{inputs.port}} ${{secrets.docker-uname}}/${{inputs.app-component}}:${{ steps.tagging.outputs.image-tag }}
       - name: Push image to DockerHub
         if  : success()
         run : |
           docker login -u ${{ secrets.docker-uname }} -p ${{ secrets.docker-token }}
-          docker push ${{ secrets.docker-uname }}/${{inputs.app-component}}:$IMAGE_TAG
+          docker push ${{ secrets.docker-uname }}/${{inputs.app-component}}:${{ steps.tagging.outputs.image-tag }}
