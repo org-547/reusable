@@ -46,9 +46,11 @@ jobs:
             tag="${GITHUB_SHA::7}"
             echo "image-tag=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
           fi
-
+          
       - name: Tagging and build of docker image    
-        run: docker build -t ${{ secrets.docker-uname }}/${{ inputs.app-component }}:${{ steps.tagging.outputs.image-tag }} .
+        run: |
+          echo "It is: ${{ steps.tagging.outputs.image-tag }}"
+          docker build -t ${{ secrets.docker-uname }}/${{ inputs.app-component }}:${{ steps.tagging.outputs.image-tag }} .
 
       - name: Test newly created build image
         run: docker run --rm -d --name ${{inputs.container}} -p ${{inputs.port}}:${{inputs.port}} ${{secrets.docker-uname}}/${{inputs.app-component}}:${{ steps.tagging.outputs.image-tag }}
