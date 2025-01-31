@@ -23,7 +23,7 @@ on:
         required: true
     
 jobs:
-  Image_build-push:
+  Image-build-push:
     runs-on: ubuntu-latest
 
     outputs:
@@ -46,7 +46,6 @@ jobs:
             tag="${GITHUB_SHA::7}"
             echo "image-tag=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
           fi
-          echo ${{ needs.Image-build-push.outputs.image-tag }}
 
       - name: Tagging and build of docker image    
         run: docker build -t ${{ secrets.docker-uname }}/${{ inputs.app-component }}:${{ steps.tagging.outputs.image-tag }} .
