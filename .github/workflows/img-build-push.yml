@@ -41,8 +41,10 @@ jobs:
         run: |
           if [[ "${{ inputs.initial }}" == "yes" ]]; then
             tag="first"
+            echo "image-tag=first" >> $GITHUB_OUTPUT
           else  
             tag="${GITHUB_SHA::7}"
+            echo "image-tag=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
           fi
           echo "image-tag value from variable is: $tag"
           echo image-tag=$tag >> $GITHUB_OUTPUT
